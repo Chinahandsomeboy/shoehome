@@ -1,0 +1,7 @@
+spring:
+  profiles:
+    active: postgresql
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
