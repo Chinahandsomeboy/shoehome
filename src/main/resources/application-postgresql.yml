@@ -1,8 +1,10 @@
 server:
-  port: 8002
+  port: 8003
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:mysql://127.0.0.1:5433/shoehome
-    username: root
-    password: root
+    url: jdbc:postgresql://127.0.0.1:5432/shoehome
+    username: postgres
+    password: 1234
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQL9Dialect

@@ -1,5 +1,7 @@
 package com.springboot.shoehome.domain;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
@@ -12,11 +14,12 @@ import java.util.Date;
 
 @Data
 @Entity
-@Table(name = "public.deposit_order")
+@Table(name = "deposit_order")
+@EqualsAndHashCode(callSuper = false)
 public class DepositOrder extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 8765786020580817522L;
 
-    @Column private Customer customerId; //关联customer
+    @Column private Customer customer; //关联customer
     @Column private String note;
     @Column private double receiptedMoney; //收入金额
     @Column private double presentedMoney; //赠送金额

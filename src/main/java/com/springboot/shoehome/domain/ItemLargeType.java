@@ -1,6 +1,7 @@
 package com.springboot.shoehome.domain;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -15,7 +16,8 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name ="public.item_largeType")
+@Table(name ="item_largeType")
+@EqualsAndHashCode(callSuper = false)
 public class ItemLargeType extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 6631071233113835862L;
 
