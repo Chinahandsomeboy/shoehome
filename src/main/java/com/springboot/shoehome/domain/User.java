@@ -17,7 +17,12 @@ import java.io.Serializable;
 public class User extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 4229235295213917883L;
 
-    @Column private String name;
-    @Column private String password;
-    @Column private String role;
+    @Column
+    private String name;
+
+    @Column
+    private String password;
+
+    @Column
+    private String role;
 }

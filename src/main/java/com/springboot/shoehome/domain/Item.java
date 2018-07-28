@@ -2,9 +2,7 @@ package com.springboot.shoehome.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -17,11 +15,20 @@ import java.util.Date;
 @Data
 @Table(name = "item")
 @EqualsAndHashCode(callSuper = false)
-public class Item extends AbsEntity implements Serializable {
+public class  Item extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 5216977460866365051L;
 
-    @Column private String name;
-    @Column private ItemLargeType largeType; //商品大类别
-    @Column private ItemSmallType smallType; //商品小类别
-    @Column private double price;
+    @Column
+    private String name;
+
+    @JoinColumn(name = "itemLargeType")
+    @ManyToOne(fetch= FetchType.LAZY)
+    private ItemLargeType largeType;
+
+    @JoinColumn(name = "itemSmallType")
+    @ManyToOne(fetch= FetchType.LAZY)
+    private ItemSmallType smallType;
+
+    @Column
+    private double price;
 }

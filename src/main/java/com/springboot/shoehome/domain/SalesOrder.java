@@ -4,9 +4,7 @@ import com.springboot.shoehome.enums.OrderStatusType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -21,15 +19,31 @@ import java.util.Date;
 public class SalesOrder extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 4763619284626943786L;
 
-    @Column private Customer customer; //关联customer
-    @Column private SalesOrderItem salesOrderItem;//关联salesorderitem
-    @Column private Date expectDate; //期望交付日期
-    @Column private OrderStatusType orderStatus; //订单状态 用enums
-    @Column private String note;
-    @Column private double totalPrice;
-    @Column private double discountPrice;
-    @Column private double finalPrice;
-    @Column private boolean isModifiedPrice;
+
+    @JoinColumn(name = "customer")
+    @ManyToOne(fetch= FetchType.LAZY)
+    private Customer customer;
+
+    @Column
+    private Date expectDate; //期望交付日期
+
+    @Column
+    private OrderStatusType orderStatus; //订单状态 用enums
+
+    @Column
+    private String note;
+
+    @Column
+    private double totalPrice;
+
+    @Column
+    private double discountPrice;
+
+    @Column
+    private double finalPrice;
+
+    @Column
+    private boolean isModifiedPrice;
 
 
 }

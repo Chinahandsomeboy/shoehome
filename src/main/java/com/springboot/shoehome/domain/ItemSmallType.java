@@ -4,9 +4,7 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -23,5 +21,6 @@ import java.util.Date;
 public class ItemSmallType extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 6459211915546324935L;
 
-    @Column private String name;
+    @Column
+    private String name;
 }

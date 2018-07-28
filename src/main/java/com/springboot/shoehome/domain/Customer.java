@@ -20,10 +20,19 @@ import java.util.Date;
 public class Customer extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 5122628303419443099L;
 
-    @Column private String name;
-    @Column private String phoneNumber;
-    @Column private DiscountType discount;//折扣用enums
-    @Column private float balance; //余额
-    @Column private String note;
+    @Column
+    private String name;
+
+    @Column
+    private String phoneNumber;
+
+    @Column
+    private DiscountType discount;//折扣用enums
+
+    @Column
+    private float balance; //余额
+
+    @Column
+    private String note;
 
 }

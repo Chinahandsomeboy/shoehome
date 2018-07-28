@@ -3,9 +3,7 @@ package com.springboot.shoehome.domain;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -20,7 +18,14 @@ import java.util.Date;
 public class SalesOrderItem extends AbsEntity implements Serializable {
     private static final long serialVersionUID = 4439487453280161403L;
 
-    @Column private String salesOrder;//绑定salessorderid
-    @Column private Item item; //项目
-    @Column private int quantity;
+    @JoinColumn(name = "sales_order")
+    @ManyToOne(fetch= FetchType.LAZY)
+    private SalesOrder salesOrder;
+
+    @JoinColumn(name = "item")
+    @ManyToOne(fetch= FetchType.LAZY)
+    private Item item;
+
+    @Column
+    private int quantity;
 }
