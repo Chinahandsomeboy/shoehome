@@ -1,5 +1,7 @@
 package com.springboot.shoehome.service;
 
+import com.springboot.shoehome.repository.ItemLargeTypeRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,4 +9,6 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class ItemLargeTypeService {
+
+    @Autowired private ItemLargeTypeRepository itemLargeTypeRepository;
 }

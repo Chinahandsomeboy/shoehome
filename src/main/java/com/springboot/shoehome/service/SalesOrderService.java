@@ -1,5 +1,7 @@
 package com.springboot.shoehome.service;
 
+import com.springboot.shoehome.repository.SalesOrderRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -7,4 +9,7 @@ import org.springframework.stereotype.Service;
  */
 @Service
 public class SalesOrderService {
+
+   @Autowired private SalesOrderRepository salesOrderRepository;
+
 }

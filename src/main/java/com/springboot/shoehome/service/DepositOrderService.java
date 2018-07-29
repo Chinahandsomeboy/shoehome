@@ -1,6 +1,6 @@
 package com.springboot.shoehome.service;
 
-import com.springboot.shoehome.repository.CustomerRepository;
+import com.springboot.shoehome.repository.DepositOrderRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * @date 2018/7/28
  */
 @Service
-public class CustomerService {
+public class DepositOrderService {
 
-    @Autowired private CustomerRepository customerRepository;
+    @Autowired private DepositOrderRepository depositOrderRepository;
 }
