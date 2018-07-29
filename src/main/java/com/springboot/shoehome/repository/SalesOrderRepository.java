@@ -5,7 +5,9 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
- * Created by acer on 2018/7/28.
+ *
+ * @author acer
+ * @date 2018/7/28
  */
 @Repository
 public interface SalesOrderRepository extends JpaRepository<SalesOrder, String>{
