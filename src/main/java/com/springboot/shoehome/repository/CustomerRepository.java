@@ -1,5 +1,7 @@
 package com.springboot.shoehome.repository;
 
+import com.springboot.shoehome.domain.Customer;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -8,5 +10,7 @@ import org.springframework.stereotype.Repository;
  * @date 2018/7/28
  */
 @Repository
-public interface CustomerRepository {
+public interface CustomerRepository extends JpaRepository<Customer,String> {
+
+    
 }

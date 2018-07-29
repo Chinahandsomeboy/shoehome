@@ -30,7 +30,7 @@ public class Customer extends AbsEntity implements Serializable {
     private DiscountType discount;//折扣用enums
 
     @Column
-    private float balance; //余额
+    private double balance; //余额
 
     @Column
     private String note;
