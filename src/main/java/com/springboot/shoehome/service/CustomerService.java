@@ -2,9 +2,13 @@ package com.springboot.shoehome.service;
 
 import com.springboot.shoehome.domain.Customer;
 import com.springboot.shoehome.repository.CustomerRepository;
+import com.springboot.shoehome.utils.QueryParams;
 import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 /**
  *
@@ -24,4 +28,7 @@ public class CustomerService {
         getCustomerRepository().save(customer);
     }
 
+    public List<Customer> getCustomer(){
+        return getCustomerRepository().findAll(new QueryParams<Customer>());
+    }
 }

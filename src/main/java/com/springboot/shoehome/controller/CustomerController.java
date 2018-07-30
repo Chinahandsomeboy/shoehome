@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -37,4 +38,14 @@ public class CustomerController {
         customerService.insert(customer);
         return id;
     }
+
+    @GetMapping("/get")
+    public int getCustomer(){
+
+        List<Customer> customerList=customerService.getCustomer();
+
+        return customerList.size();
+    }
+
+
 }

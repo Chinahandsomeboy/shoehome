@@ -28,6 +28,7 @@ public class SalesOrder extends AbsEntity implements Serializable {
     private Date expectDate; //期望交付日期
 
     @Column
+    @Enumerated(EnumType.STRING)
     private OrderStatusType orderStatus; //订单状态 用enums
 
     @Column

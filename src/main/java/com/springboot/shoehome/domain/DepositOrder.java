@@ -1,4 +1,5 @@
 package com.springboot.shoehome.domain;
+import com.springboot.shoehome.enums.DiscountType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -34,7 +35,8 @@ public class DepositOrder extends AbsEntity implements Serializable {
     private double totalMoney; //总共金额
 
     @Column
-    private String changeDiscount; //更改的折扣
+    @Enumerated(EnumType.STRING)
+    private DiscountType changeDiscount; //更改的折扣
 
     @Column
     private boolean isChangedDiscount; //是否更改折扣

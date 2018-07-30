@@ -2,12 +2,8 @@ package com.springboot.shoehome.domain;
 import com.springboot.shoehome.enums.DiscountType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
 
 /**
  * @author zn
@@ -27,6 +23,7 @@ public class Customer extends AbsEntity implements Serializable {
     private String phoneNumber;
 
     @Column
+    @Enumerated(EnumType.STRING)
     private DiscountType discount;//折扣用enums
 
     @Column
