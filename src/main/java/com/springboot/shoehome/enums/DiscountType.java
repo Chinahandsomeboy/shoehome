@@ -2,13 +2,15 @@ package com.springboot.shoehome.enums;
 
 import lombok.Data;
 
+import javax.persistence.Enumerated;
+import java.io.Serializable;
 import java.util.EnumSet;
 
 /**
  * @author zn
  */
-
 public enum DiscountType {
+
     FiveDiscount("五折", 5),SixDiscount("六折", 6),SevenDiscount("七折", 7),
     EightDiscount("八折", 8),NineDiscount("九折", 9),TenDiscount("无折扣", 10);
 

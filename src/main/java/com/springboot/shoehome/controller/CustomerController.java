@@ -29,7 +29,7 @@ public class CustomerController {
         customer.setCode("1");
         customer.setName("1");
         customer.setBalance(15.5);
-        customer.setDiscount(DiscountType.FiveDiscount);
+        customer.setDiscount(DiscountType.SevenDiscount);
         customer.setNote("1");
         customer.setPhoneNumber("1");
         customer.setCreateDate(new Date());

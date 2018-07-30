@@ -1,7 +1,11 @@
 package com.springboot.shoehome.enums;
 
+import java.io.Serializable;
+
 /**
- * Created by acer on 2018/1/13.
+ *
+ * @author acer
+ * @date 2018/1/13
  */
 public enum ResultEnum {
     UNKOWN_ERROR(-1,"未知错误"),
