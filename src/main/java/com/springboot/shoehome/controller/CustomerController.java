@@ -40,11 +40,10 @@ public class CustomerController {
     }
 
     @GetMapping("/get")
-    public int getCustomer(){
+    public String getCustomer(){
 
         List<Customer> customerList=customerService.getCustomer();
-
-        return customerList.size();
+        return customerList.toString();
     }
 
 

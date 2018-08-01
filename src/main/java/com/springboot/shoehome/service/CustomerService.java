@@ -1,8 +1,10 @@
 package com.springboot.shoehome.service;
 
 import com.springboot.shoehome.domain.Customer;
+import com.springboot.shoehome.enums.QueryParamsMatchType;
 import com.springboot.shoehome.repository.CustomerRepository;
 import com.springboot.shoehome.utils.QueryParams;
+import com.springboot.shoehome.utils.QueryParamsFilter;
 import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,6 +31,9 @@ public class CustomerService {
     }
 
     public List<Customer> getCustomer(){
-        return getCustomerRepository().findAll(new QueryParams<Customer>());
+        QueryParams queryParams=new QueryParams<Customer>();
+        queryParams.setQueryParamsFilterList(new QueryParamsFilter("1","1",QueryParamsMatchType.IN));
+        queryParams.setQueryParamsFilterList(new QueryParamsFilter("2","2",QueryParamsMatchType.EQ));
+        return getCustomerRepository().findAll(queryParams);
     }
 }
