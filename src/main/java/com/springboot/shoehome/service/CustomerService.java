@@ -7,6 +7,8 @@ import com.springboot.shoehome.utils.QueryParams;
 import com.springboot.shoehome.utils.QueryParamsFilter;
 import org.hibernate.sql.Insert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,7 @@ public class CustomerService {
     }
 
     public List<Customer> getCustomer(){
+        System.out.println("11");
         QueryParams queryParams=new QueryParams<Customer>();
         queryParams.setQueryParamsFilterList(new QueryParamsFilter("1","1",QueryParamsMatchType.IN));
         queryParams.setQueryParamsFilterList(new QueryParamsFilter("2","2",QueryParamsMatchType.EQ));
