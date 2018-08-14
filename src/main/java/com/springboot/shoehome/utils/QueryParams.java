@@ -28,6 +28,7 @@ public  class QueryParams<T> implements Specification<T>{
     @Override
     public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
         System.out.println(this.queryParamsFilterList.size());
+        //conjunction和disjunction root.join
         Path<String> name = root.get("name");
         Path<String> note = root.get("note");
         Predicate p1 = criteriaBuilder.equal(name ,"1");
