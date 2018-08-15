@@ -33,7 +33,7 @@ public  class QueryParams<T> implements Specification<T>{
         Path<String> note = root.get("note");
         Predicate p1 = criteriaBuilder.equal(name ,"1");
         Predicate p2 = criteriaBuilder.equal(note ,"1");
-        return criteriaBuilder.and(p1,p2);
+        return criteriaBuilder.or(p1,p2);
     }
 
     public List<QueryParamsFilter> getQueryParamsFilterList() {

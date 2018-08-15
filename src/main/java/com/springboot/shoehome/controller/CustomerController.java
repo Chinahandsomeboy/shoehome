@@ -27,14 +27,12 @@ public class CustomerController {
         Customer customer=new Customer();
 
         customer.setCode("1");
-        customer.setName("1");
+        customer.setName(id);
         customer.setBalance(15.5);
         customer.setDiscount(DiscountType.SevenDiscount);
-        customer.setNote("1");
+        customer.setNote("2222");
         customer.setPhoneNumber("1");
         customer.setCreateDate(new Date());
-
-
         customerService.insert(customer);
         return id;
     }
