@@ -33,10 +33,14 @@ public class CustomerService {
     }
 
     public List<Customer> getCustomer(){
-        System.out.println("11");
-        QueryParams queryParams=new QueryParams<Customer>();
-        queryParams.setQueryParamsFilterList(new QueryParamsFilter("1","1",QueryParamsMatchType.IN));
-        queryParams.setQueryParamsFilterList(new QueryParamsFilter("2","2",QueryParamsMatchType.EQ));
+        QueryParams<Customer> queryParams=new QueryParams<>();
+	    queryParams.and(QueryParamsFilter.gt("name","1"),
+			    QueryParamsFilter.gt("code","2"));
+	    queryParams.or(QueryParamsFilter.ge("balance","1"),
+			    QueryParamsFilter.ge("balance","2"),
+			    QueryParamsFilter.le("discount","2"),
+			    QueryParamsFilter.le("note","2"),
+			    QueryParamsFilter.gt("phoneNumber","2"));
         return getCustomerRepository().findAll(queryParams);
     }
 }

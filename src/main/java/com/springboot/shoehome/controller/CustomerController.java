@@ -38,10 +38,10 @@ public class CustomerController {
     }
 
     @GetMapping("/get")
-    public String getCustomer(){
+    public List<Customer> getCustomer(){
 
         List<Customer> customerList=customerService.getCustomer();
-        return customerList.toString();
+        return customerList;
     }
 
 
