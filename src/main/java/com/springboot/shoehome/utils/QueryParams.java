@@ -13,6 +13,8 @@ import java.util.List;
  */
 public class QueryParams<T> implements Specification<T> {
 
+	enum Type{Or,And}
+
 	private List<QueryParamsFilter> andFilters ;
 	private List<QueryParamsFilter> orFilters ;
 
@@ -63,19 +65,21 @@ public class QueryParams<T> implements Specification<T> {
 		//Predicate p1 = criteriaBuilder.equal(name ,"1");
 		//Predicate p2 = criteriaBuilder.equal(note ,"1");
 		//Predicate predicate = criteriaBuilder.or(and,or);
+
+		// and 和or 条件没有同时用的情况, 进行formate sql
 		if(andFilters != null && orFilters == null){
-			return parseFilters(andFilters, criteriaBuilder, root, "and");
+			return parseFilters(andFilters, criteriaBuilder, root, Type.And);
 		}else if(andFilters == null && orFilters != null ){
-			return parseFilters(orFilters, criteriaBuilder, root, "or");
+			return parseFilters(orFilters, criteriaBuilder, root, Type.Or);
 		}else if(andFilters == null && orFilters == null){
 			System.out.println("none predicate");
 		}else {
-			return criteriaBuilder.or(parseFilters(andFilters, criteriaBuilder, root, "and"), parseFilters(orFilters, criteriaBuilder, root, "or"));
+			return criteriaBuilder.or(parseFilters(andFilters, criteriaBuilder, root, Type.And), parseFilters(orFilters, criteriaBuilder, root, Type.Or));
 		}
 		return null;
 	}
 
-	public Predicate parseFilters(List<QueryParamsFilter> QueryParams, CriteriaBuilder criteriaBuilder, Root<T> root, String type) {
+	public Predicate parseFilters(List<QueryParamsFilter> QueryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Enum type) {
 		Predicate predicate = criteriaBuilder.conjunction();
 		if (QueryParams != null){
 			for (QueryParamsFilter queryParamsFilter : QueryParams) {
@@ -85,7 +89,7 @@ public class QueryParams<T> implements Specification<T> {
 						predicate = chooseOrAnd(predicate, criteriaBuilder.equal(root.get(queryParamsFilter.getName()), queryParamsFilter.getValue()), criteriaBuilder, type);
 						break;
 					case NE:
-						predicate = chooseOrAnd(predicate, predicate = criteriaBuilder.notEqual(root.get(queryParamsFilter.getName()), queryParamsFilter.getValue()), criteriaBuilder, type);
+						predicate = chooseOrAnd(predicate, criteriaBuilder.notEqual(root.get(queryParamsFilter.getName()), queryParamsFilter.getValue()), criteriaBuilder, type);
 						break;
 					case GT:
 						predicate = chooseOrAnd(predicate, criteriaBuilder.gt(root.get(queryParamsFilter.getName()), (int) queryParamsFilter.getValue()), criteriaBuilder, type);
@@ -123,14 +127,15 @@ public class QueryParams<T> implements Specification<T> {
 		return predicate;
 	}
 
-	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, String type){
-		if ("and".equalsIgnoreCase(type)) {
+	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum  type){
+		if (type == Type.And) {
 			return criteriaBuilder.and(basicPredicate, newPredicate);
-		} else if ("or".equalsIgnoreCase(type)) {
+		} else if (type == Type.Or) {
 			return criteriaBuilder.or(basicPredicate, newPredicate);
-		} else {
-			System.out.println("type error!!!");
-			return basicPredicate;
+		}else {
+			//抛异常 sout代替
+			System.out.println("chooseOrAnd function error");
+			return null;
 		}
 	}
 

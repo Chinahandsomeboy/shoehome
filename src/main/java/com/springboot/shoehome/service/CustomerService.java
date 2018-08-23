@@ -36,7 +36,7 @@ public class CustomerService {
     public List<Customer> getCustomer(){
         QueryParams<Customer> queryParams=new QueryParams<>();
 	    queryParams.and(QueryParamsFilter.eq("name","1"),
-			    QueryParamsFilter.eq("code","1"),
+                QueryParamsFilter.eq("code","1"),
 			    QueryParamsFilter.eq("discount",DiscountType.SevenDiscount));
 	    queryParams.or(QueryParamsFilter.gt("balance",15),
 			    QueryParamsFilter.like("phoneNumber","2"));
