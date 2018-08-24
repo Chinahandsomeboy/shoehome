@@ -28,22 +28,16 @@ public class QueryParams<T> implements Specification<T> {
 		orFilters = Arrays.asList(queryParamsFilters);
 	}
 
-	public QueryParams leftJoin() {
+	public QueryParams leftOuterJoin(String tableName, JoinType joinType) {
 
 		return this;
 	}
 
-	public QueryParams leftInnerJoin() {
-
+	public QueryParams rightOuterJoin() {
 		return this;
 	}
 
-	public QueryParams rightJoin() {
-		return this;
-	}
-
-	public QueryParams rightInnerJoin() {
-
+	public QueryParams innerJoin() {
 		return this;
 	}
 
