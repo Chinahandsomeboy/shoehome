@@ -1,4 +1,5 @@
 package com.springboot.shoehome.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.shoehome.enums.DiscountType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;

@@ -1,5 +1,7 @@
 package com.springboot.shoehome.utils;
 
+import com.springboot.shoehome.domain.Customer;
+import com.springboot.shoehome.domain.SalesOrder;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -67,20 +69,20 @@ public class QueryParams<T> implements Specification<T> {
 		//Predicate predicate = criteriaBuilder.or(and,or);
 
 		// and 和or 条件没有同时用的情况, 进行formate sql
+		Predicate predicate =null;
+		Join<T, Customer> customerJoin = root.join("customer",JoinType.LEFT);
+		Predicate p = criteriaBuilder.equal(customerJoin.get("note"),"111");
 		if(andFilters != null && orFilters == null){
-			return parseFilters(andFilters, criteriaBuilder, root, Type.And);
+			return parseFilters(andFilters, criteriaBuilder, root, p, Type.And);
 		}else if(andFilters == null && orFilters != null ){
-			return parseFilters(orFilters, criteriaBuilder, root, Type.Or);
-		}else if(andFilters == null && orFilters == null){
-			System.out.println("none predicate");
+			return parseFilters(orFilters, criteriaBuilder, root, p, Type.Or);
 		}else {
-			return criteriaBuilder.or(parseFilters(andFilters, criteriaBuilder, root, Type.And), parseFilters(orFilters, criteriaBuilder, root, Type.Or));
+			System.out.println("none predicate");
 		}
 		return null;
 	}
 
-	public Predicate parseFilters(List<QueryParamsFilter> QueryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Enum type) {
-		Predicate predicate = criteriaBuilder.conjunction();
+	public Predicate parseFilters(List<QueryParamsFilter> QueryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Predicate predicate, Enum type) {
 		if (QueryParams != null){
 			for (QueryParamsFilter queryParamsFilter : QueryParams) {
 
@@ -128,14 +130,18 @@ public class QueryParams<T> implements Specification<T> {
 	}
 
 	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum  type){
-		if (type == Type.And) {
-			return criteriaBuilder.and(basicPredicate, newPredicate);
-		} else if (type == Type.Or) {
-			return criteriaBuilder.or(basicPredicate, newPredicate);
-		}else {
-			//抛异常 sout代替
-			System.out.println("chooseOrAnd function error");
-			return null;
+		if(basicPredicate == null){
+			return newPredicate;
+		}else{
+			if (type == Type.And) {
+				return criteriaBuilder.and(basicPredicate, newPredicate);
+			} else if (type == Type.Or) {
+				return criteriaBuilder.or(basicPredicate, newPredicate);
+			}else {
+				//抛异常 sout代替
+				System.out.println("chooseOrAnd function error");
+				return null;
+			}
 		}
 	}
 

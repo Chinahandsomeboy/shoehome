@@ -1,8 +1,10 @@
 package com.springboot.shoehome.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.shoehome.enums.OrderStatusType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.hibernate.annotations.Type;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,6 +24,7 @@ public class SalesOrder extends AbsEntity implements Serializable {
 
     @JoinColumn(name = "customer")
     @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Customer customer;
 
     @Column
@@ -44,7 +47,8 @@ public class SalesOrder extends AbsEntity implements Serializable {
     private double finalPrice;
 
     @Column
-    private boolean isModifiedPrice;
+    @Type(type = "true_false")
+    private Boolean isModifiedPrice;
 
 
 }
