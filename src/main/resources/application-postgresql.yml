@@ -5,6 +5,6 @@ spring:
     driver-class-name: org.postgresql.Driver
     url: jdbc:postgresql://127.0.0.1:5432/shoehome
     username: postgres
-    password: 1234
+    password: root
   jpa:
     database-platform: org.hibernate.dialect.PostgreSQL9Dialect
