@@ -2,7 +2,7 @@ package com.springboot.shoehome.service;
 
 import com.springboot.shoehome.domain.SalesOrder;
 import com.springboot.shoehome.repository.SalesOrderRepository;
-import com.springboot.shoehome.utils.QueryParams;
+import com.springboot.shoehome.utils.Query;
 import com.springboot.shoehome.utils.QueryParamsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,8 +22,9 @@ public class SalesOrderService {
    public void insert(SalesOrder salesOrder){ getSalesOrderRepository().save(salesOrder);}
 
    public List getSalesOrder(){
-      QueryParams<SalesOrder> queryParams =new QueryParams<>();
-      queryParams.and(QueryParamsFilter.eq("note","1"));
-      return getSalesOrderRepository().findAll(queryParams);
+      Query<SalesOrder> query =new Query<>();
+      query.and(QueryParamsFilter.eq("note","1"));
+      query.leftJoin("customer");
+      return getSalesOrderRepository().findAll(query);
    }
 }

@@ -1,43 +1,46 @@
 package com.springboot.shoehome.utils;
 
 import com.springboot.shoehome.domain.Customer;
-import com.springboot.shoehome.domain.SalesOrder;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author acer
  * @date 2018/7/30
  */
-public class QueryParams<T> implements Specification<T> {
+public class Query<T> implements Specification<T> {
 
 	enum Type{Or,And}
 
-	private List<QueryParamsFilter> andFilters ;
-	private List<QueryParamsFilter> orFilters ;
+	private List<QueryParamsFilter> andFilters = new ArrayList<>();
+	private List<QueryParamsFilter> orFilters = new ArrayList<>();
+	private List<QueryJoinFilter> joinFilters = new ArrayList<>();
+	private Map<String, Join> joinMap = new HashMap<>();
 
 	public void and(QueryParamsFilter... queryParamsFilters) {
-		andFilters = Arrays.asList(queryParamsFilters);
+		for (QueryParamsFilter queryParamsFilter : queryParamsFilters) {
+			andFilters.add(queryParamsFilter);
+		}
 	}
 
 	public void or(QueryParamsFilter... queryParamsFilters) {
 		orFilters = Arrays.asList(queryParamsFilters);
 	}
 
-	public QueryParams leftOuterJoin(String tableName, JoinType joinType) {
-
+	public Query leftJoin(String tableName) {
+		joinFilters.add(QueryJoinFilter.leftJoin(tableName));
 		return this;
 	}
 
-	public QueryParams rightOuterJoin() {
+	public Query rightJoin(String tableName) {
+		joinFilters.add(QueryJoinFilter.rightJoin(tableName));
 		return this;
 	}
 
-	public QueryParams innerJoin() {
+	public Query innerJoin(String tableName) {
+		joinFilters.add(QueryJoinFilter.innerJoin(tableName));
 		return this;
 	}
 
@@ -63,13 +66,13 @@ public class QueryParams<T> implements Specification<T> {
 		//Predicate predicate = criteriaBuilder.or(and,or);
 
 		// and 和or 条件没有同时用的情况, 进行formate sql
-		Predicate predicate =null;
-		Join<T, Customer> customerJoin = root.join("customer",JoinType.LEFT);
-		Predicate p = criteriaBuilder.equal(customerJoin.get("note"),"111");
-		if(andFilters != null && orFilters == null){
-			return parseFilters(andFilters, criteriaBuilder, root, p, Type.And);
-		}else if(andFilters == null && orFilters != null ){
-			return parseFilters(orFilters, criteriaBuilder, root, p, Type.Or);
+		Predicate predicate = null;
+		addJoin(joinFilters, root);
+		predicate = criteriaBuilder.equal(joinMap.get("customer").get("note"),"2222");
+		if(andFilters.size() != 0 && orFilters.size() == 0){
+			return parseFilters(andFilters, criteriaBuilder, root, predicate, Type.And);
+		}else if(andFilters.size() == 0 && orFilters.size() != 0){
+			return parseFilters(orFilters, criteriaBuilder, root, predicate, Type.Or);
 		}else {
 			System.out.println("none predicate");
 		}
@@ -137,6 +140,18 @@ public class QueryParams<T> implements Specification<T> {
 				return null;
 			}
 		}
+	}
+
+	public void addJoin(List<QueryJoinFilter> queryJoinFilters, Root<T> root){
+		for (QueryJoinFilter queryJoinFilter : queryJoinFilters) {
+			joinMap.put(queryJoinFilter.getTable(), root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType()));
+		}
+	}
+
+	public String[] analyzeParamsName(String paramsName){
+		//解析join表的name属性
+		String[] s = paramsName.split(".");
+		return s;
 	}
 
 }

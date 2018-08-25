@@ -4,6 +4,7 @@ import com.springboot.shoehome.domain.SalesOrder;
 import com.springboot.shoehome.enums.OrderStatusType;
 import com.springboot.shoehome.service.CustomerService;
 import com.springboot.shoehome.service.SalesOrderService;
+import com.springboot.shoehome.utils.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -19,7 +20,7 @@ import java.util.List;
  * @date 2018/7/28
  */
 @RestController
-@RequestMapping("/salesOrder")
+@RequestMapping("/salesorder")
 public class SalesOrderController {
 
     @Autowired private SalesOrderService salesOrderService;
@@ -45,5 +46,11 @@ public class SalesOrderController {
     @GetMapping("/get")
     public List<SalesOrder> find(){
         return salesOrderService.getSalesOrder();
+    }
+
+    @GetMapping("/string/{s}")
+    public void strings(@PathVariable("s") String s){
+        Query<SalesOrder> q = new Query<>();
+        String[] ss = q.analyzeParamsName(s);
     }
 }
