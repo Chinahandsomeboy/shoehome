@@ -23,7 +23,8 @@ public class SalesOrderService {
 
    public List getSalesOrder(){
       Query<SalesOrder> query =new Query<>();
-      query.and(QueryParamsFilter.eq("note","1"));
+      query.and(QueryParamsFilter.eq("note","1"),
+                  QueryParamsFilter.eq("customer.note","2222"));
       query.leftJoin("customer");
       return getSalesOrderRepository().findAll(query);
    }

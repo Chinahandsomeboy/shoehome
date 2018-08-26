@@ -48,9 +48,4 @@ public class SalesOrderController {
         return salesOrderService.getSalesOrder();
     }
 
-    @GetMapping("/string/{s}")
-    public void strings(@PathVariable("s") String s){
-        Query<SalesOrder> q = new Query<>();
-        String[] ss = q.analyzeParamsName(s);
-    }
 }
