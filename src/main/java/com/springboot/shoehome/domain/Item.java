@@ -1,4 +1,5 @@
 package com.springboot.shoehome.domain;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -23,10 +24,12 @@ public class  Item extends AbsEntity implements Serializable {
 
     @JoinColumn(name = "itemLargeType")
     @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private ItemLargeType largeType;
 
     @JoinColumn(name = "itemSmallType")
     @ManyToOne(fetch= FetchType.LAZY)
+    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private ItemSmallType smallType;
 
     @Column
