@@ -27,10 +27,13 @@ public class ItemService {
 
     public List getItem(){
         Query<Item> itemQuery = new Query<>();
-        itemQuery.leftJoin("itemsmalltype");
-        itemQuery.leftJoin("itemlargetype");
+        //必须完全和字段名一致 希望可以设置别名
+        itemQuery.leftJoin("itemSmallType");
+        itemQuery.leftJoin("itemLargeType");
         itemQuery.and(QueryParamsFilter.eq("name","洗衣服"),
-                QueryParamsFilter.eq("itemsmalltype.name","ship1"));
+                QueryParamsFilter.eq("itemSmallType.name","wash1"),
+                QueryParamsFilter.eq("itemLargeType.name","wash"));
+
 
         return getItemRepository().findAll(itemQuery);
     }

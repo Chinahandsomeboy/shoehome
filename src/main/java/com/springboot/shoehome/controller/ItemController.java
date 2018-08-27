@@ -29,12 +29,12 @@ public class ItemController {
     @GetMapping("/{id}")
     public String addItem (@PathVariable("id") String id){
         Item item = new Item();
-        item.setName("洗衣服");
+        item.setName("修衣服");
         item.setPrice(10);
         item.setCode(id);
         item.setCreateDate(new Date());
-        item.setLargeType(itemLargeTypeService.getItemLargeTypeByid("4028860f6576a1be016576a2fea80002"));
-        item.setSmallType(itemSmallTypeService.getItemSmallTypeByid("4028860f6576a1be016576a389830004"));
+        item.setItemLargeType(itemLargeTypeService.getItemLargeTypeByid("4028fe5c6578ef16016578f0dfe40007"));
+        item.setItemSmallType(itemSmallTypeService.getItemSmallTypeByid("4028fe5c6578ef16016578f0add70005"));
         itemService.addItem(item);
         return id;
     }

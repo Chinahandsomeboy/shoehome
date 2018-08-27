@@ -25,12 +25,12 @@ public class  Item extends AbsEntity implements Serializable {
     @JoinColumn(name = "itemLargeType")
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private ItemLargeType largeType;
+    private ItemLargeType itemLargeType;
 
     @JoinColumn(name = "itemSmallType")
     @ManyToOne(fetch= FetchType.LAZY)
     @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
-    private ItemSmallType smallType;
+    private ItemSmallType itemSmallType;
 
     @Column
     private double price;

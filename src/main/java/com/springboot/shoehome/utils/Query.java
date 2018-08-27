@@ -1,5 +1,7 @@
 package com.springboot.shoehome.utils;
 
+import com.springboot.shoehome.domain.Customer;
+import com.springboot.shoehome.domain.ItemSmallType;
 import org.springframework.data.jpa.domain.Specification;
 
 import javax.persistence.criteria.*;
@@ -64,10 +66,18 @@ public class Query<T> implements Specification<T> {
 		//Predicate p2 = criteriaBuilder.equal(note ,"1");
 		//Predicate predicate = criteriaBuilder.or(and,or);
 
+		//Join<T, ItemSmallType> join = root.join("smallType",JoinType.LEFT);
+		//Join<T, Customer> join1 = root.join("customer",JoinType.LEFT);
+		//predicate = criteriaBuilder.equal(joinMap.get("customer").get("note"),"2222");
 		// and 和or 条件没有同时用的情况, 进行formate sql
 		Predicate predicate = null;
-		addJoin(joinFilters, root);
-		//predicate = criteriaBuilder.equal(joinMap.get("customer").get("note"),"2222");
+		//addJoin(joinFilters, root);
+		//root.getAlias()
+		root.alias("_SO_");
+		root.join("customer",JoinType.LEFT).alias("_C_");
+
+
+		predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
 		if(andFilters.size() != 0 && orFilters.size() == 0){
 			return parseFilters(andFilters, criteriaBuilder, root, predicate, Type.And);
 		}else if(andFilters.size() == 0 && orFilters.size() != 0){
