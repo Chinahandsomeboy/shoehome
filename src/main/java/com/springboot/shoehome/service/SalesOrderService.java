@@ -23,9 +23,8 @@ public class SalesOrderService {
 
    public List getSalesOrder(){
       Query<SalesOrder> query =new Query<>();
-      query.and(QueryParamsFilter.eq("note","1"),
-              QueryParamsFilter.eq("customer.note","2222"),
-              QueryParamsFilter.eq("customer.balance",15.5));
+      query.and(QueryParamsFilter.between("finalPrice",12.0,13.3)
+             );
       query.leftJoin("customer");
       return getSalesOrderRepository().findAll(query);
    }

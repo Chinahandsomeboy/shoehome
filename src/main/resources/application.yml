@@ -1,6 +1,6 @@
 spring:
   profiles:
-    active: gspostgresql
+    active: postgresql
   jpa:
     show-sql: true
     hibernate:

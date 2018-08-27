@@ -47,23 +47,23 @@ public  class QueryParamsFilter {
     }
 
     public static QueryParamsFilter like(String name, Object value){
-        return new QueryParamsFilter(name, value, QueryParamsMatchType.LIKE);
+        return new QueryParamsFilter(name, "%"+value+"%", QueryParamsMatchType.LIKE);
     }
 
     public static QueryParamsFilter in(String name, Object valueList){
         return new QueryParamsFilter(name, valueList, QueryParamsMatchType.IN);
     }
 
-    public static QueryParamsFilter isNull(String name, Object value){
-        return new QueryParamsFilter(name, value, QueryParamsMatchType.ISNULL);
+    public static QueryParamsFilter isNull(String name){
+        return new QueryParamsFilter(name,null, QueryParamsMatchType.ISNULL);
     }
 
-    public static QueryParamsFilter isNotNull(String name, Object value){
-        return new QueryParamsFilter(name, value, QueryParamsMatchType.ISNOTNULL);
+    public static QueryParamsFilter isNotNull(String name){
+        return new QueryParamsFilter(name, null, QueryParamsMatchType.ISNOTNULL);
     }
 
-    public static QueryParamsFilter between(String name, Object minValue, Object maxValue){
-        List valueList =new ArrayList();
+    public static <T extends Number> QueryParamsFilter between(String name, T minValue, T maxValue){
+        List<T> valueList = new ArrayList<>();
         valueList.add(minValue);
         valueList.add(maxValue);
         return new QueryParamsFilter(name, valueList, QueryParamsMatchType.BETWEEN);
