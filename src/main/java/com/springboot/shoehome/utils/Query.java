@@ -77,7 +77,7 @@ public class Query<T> implements Specification<T> {
 		//root.join("customer",JoinType.LEFT).alias("_C_");
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
 		//criteriaBuilder.in(, CriteriaBuilder.In)
-
+		//criteriaBuilder.between(root.get("name"),(T)andFilters.get(0),(T)andFilters.get(0));
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
 		if(andFilters.size() != 0 && orFilters.size() == 0){
@@ -90,7 +90,7 @@ public class Query<T> implements Specification<T> {
 		return null;
 	}
 
-	public Predicate parseFilters(List<QueryParamsFilter> queryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Predicate predicate, Enum type) {
+	public  Predicate parseFilters(List<QueryParamsFilter> queryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Predicate predicate, Enum type) {
 		if (queryParams != null){
 			for (QueryParamsFilter queryParamsFilter : queryParams) {
 				switch (queryParamsFilter.getType()) {
@@ -117,7 +117,7 @@ public class Query<T> implements Specification<T> {
 						break;
 					case IN:
 						//predicate = criteriaBuilder.in(root.get(queryParamsFilter.getName()));
-						//predicate = chooseOrAnd(predicate, criteriaBuilder.gt(root.get(queryParamsFilter.getName()), (int) queryParamsFilter.getValue()), criteriaBuilder, type);
+						predicate = chooseOrAnd(predicate, root.get(queryParamsFilter.getName()).in(queryParamsFilter.getValue()), criteriaBuilder, type);
 						break;
 					case ISNULL:
 						predicate = chooseOrAnd(predicate, criteriaBuilder.isNull(analyzeParamsName(queryParamsFilter.getName(), root)), criteriaBuilder, type);
@@ -135,7 +135,7 @@ public class Query<T> implements Specification<T> {
 		return predicate;
 	}
 
-	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum  type){
+	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum type){
 		if(basicPredicate == null){
 			return newPredicate;
 		}else{

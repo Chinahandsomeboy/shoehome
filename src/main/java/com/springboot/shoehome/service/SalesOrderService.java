@@ -7,6 +7,7 @@ import com.springboot.shoehome.utils.QueryParamsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -23,7 +24,10 @@ public class SalesOrderService {
 
    public List getSalesOrder(){
       Query<SalesOrder> query =new Query<>();
-      query.and(QueryParamsFilter.between("finalPrice",12.0,13.3)
+      List a = new ArrayList();
+      a.add(true);
+      a.add(false);
+      query.and(QueryParamsFilter.in("isModifiedPrice",a)
              );
       query.leftJoin("customer");
       return getSalesOrderRepository().findAll(query);

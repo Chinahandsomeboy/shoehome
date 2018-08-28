@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -46,11 +48,11 @@ public  class QueryParamsFilter {
         return new QueryParamsFilter(name, value, QueryParamsMatchType.LE);
     }
 
-    public static QueryParamsFilter like(String name, Object value){
+    public static QueryParamsFilter like(String name, String value){
         return new QueryParamsFilter(name, "%"+value+"%", QueryParamsMatchType.LIKE);
     }
 
-    public static QueryParamsFilter in(String name, Object valueList){
+    public static <T extends Collection> QueryParamsFilter in(String name, T valueList){
         return new QueryParamsFilter(name, valueList, QueryParamsMatchType.IN);
     }
 
@@ -63,7 +65,14 @@ public  class QueryParamsFilter {
     }
 
     public static <T extends Number> QueryParamsFilter between(String name, T minValue, T maxValue){
-        List<T> valueList = new ArrayList<>();
+        List<Double> valueList = new ArrayList<>();
+        valueList.add(new Double(minValue.toString()));
+        valueList.add(new Double(maxValue.toString()));
+        return new QueryParamsFilter(name, valueList, QueryParamsMatchType.BETWEEN);
+    }
+
+    public static <T extends Date> QueryParamsFilter between(String name, T minValue, T maxValue){
+        List<Date> valueList = new ArrayList<>();
         valueList.add(minValue);
         valueList.add(maxValue);
         return new QueryParamsFilter(name, valueList, QueryParamsMatchType.BETWEEN);
