@@ -76,7 +76,7 @@ public class Query<T> implements Specification<T> {
 		//root.alias("_SO_");
 		//root.join("customer",JoinType.LEFT).alias("_C_");
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
-criteriaBuilder.in(, CriteriaBuilder.In)
+		//criteriaBuilder.in(, CriteriaBuilder.In)
 
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
