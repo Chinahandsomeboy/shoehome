@@ -11,3 +11,4 @@
 10.其他功能：支付宝微信付款码接入
 
 jpa 封装 
+实现 join and or alias 子查询 临时表查询 聚合函数 pageable sortby 
