@@ -7,7 +7,12 @@ import com.springboot.shoehome.utils.QueryParamsFilter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.xml.crypto.Data;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -22,14 +27,22 @@ public class SalesOrderService {
 
    public void insert(SalesOrder salesOrder){ getSalesOrderRepository().save(salesOrder);}
 
-   public List getSalesOrder(){
+   public List getSalesOrder() {
       Query<SalesOrder> query =new Query<>();
-      List a = new ArrayList();
-      a.add(true);
-      a.add(false);
-      query.and(QueryParamsFilter.in("isModifiedPrice",a)
+
+      try {
+         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
+         Date myDate1 = dateFormat1.parse("2018-08-26");
+      } catch (ParseException e) {
+         e.printStackTrace();
+      }
+      query.and(QueryParamsFilter.eq("discountPrice", 10.0)
              );
-      query.leftJoin("customer");
+//      query.or(QueryParamsFilter.eq("finalPrice", 1),
+//              QueryParamsFilter.eq("note", 2)
+//              );
+      //query.leftJoin("customer");
+
       return getSalesOrderRepository().findAll(query);
    }
 }

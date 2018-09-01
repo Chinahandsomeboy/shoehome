@@ -64,15 +64,8 @@ public  class QueryParamsFilter {
         return new QueryParamsFilter(name, null, QueryParamsMatchType.ISNOTNULL);
     }
 
-    public static <T extends Number> QueryParamsFilter between(String name, T minValue, T maxValue){
-        List<Double> valueList = new ArrayList<>();
-        valueList.add(new Double(minValue.toString()));
-        valueList.add(new Double(maxValue.toString()));
-        return new QueryParamsFilter(name, valueList, QueryParamsMatchType.BETWEEN);
-    }
-
-    public static <T extends Date> QueryParamsFilter between(String name, T minValue, T maxValue){
-        List<Date> valueList = new ArrayList<>();
+    public static <T extends Comparable> QueryParamsFilter between(String name, T minValue, T maxValue){
+        List<Comparable> valueList = new ArrayList<>();
         valueList.add(minValue);
         valueList.add(maxValue);
         return new QueryParamsFilter(name, valueList, QueryParamsMatchType.BETWEEN);

@@ -21,9 +21,7 @@ public class Query<T> implements Specification<T> {
 	private Map<String, Join> joinMap = new HashMap<>();
 
 	public void and(QueryParamsFilter... queryParamsFilters) {
-		for (QueryParamsFilter queryParamsFilter : queryParamsFilters) {
-			andFilters.add(queryParamsFilter);
-		}
+		andFilters.addAll(Arrays.asList(queryParamsFilters));
 	}
 
 	public void or(QueryParamsFilter... queryParamsFilters) {
@@ -55,35 +53,18 @@ public class Query<T> implements Specification<T> {
 
 	@Override
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
-		//System.out.println(this.queryParamsFilterList.size());
-		//conjunction和disjunction root.join
-		//Predicate p = criteriaBuilder.and(criteriaBuilder.equal(root.get("name"), "1"), criteriaBuilder.equal(root.get("code"), "1"));
-		//Predicate p1 = criteriaBuilder.or(criteriaBuilder.equal(root.get("note"), "1"));
-
-		//Path<String> name = root.get("name");
-		// Path<String> note = root.get("note");
-		//Predicate p1 = criteriaBuilder.equal(name ,"1");
-		//Predicate p2 = criteriaBuilder.equal(note ,"1");
-		//Predicate predicate = criteriaBuilder.or(and,or);
-
-		//Join<T, ItemSmallType> join = root.join("smallType",JoinType.LEFT);
-		//Join<T, Customer> join1 = root.join("customer",JoinType.LEFT);
-		//predicate = criteriaBuilder.equal(joinMap.get("customer").get("note"),"2222");
-		// and 和or 条件没有同时用的情况, 进行formate sql
-
-
 		//root.getAlias()
 		//root.alias("_SO_");
 		//root.join("customer",JoinType.LEFT).alias("_C_");
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
-		//criteriaBuilder.in(, CriteriaBuilder.In)
-		//criteriaBuilder.between(root.get("name"),(T)andFilters.get(0),(T)andFilters.get(0));
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
 		if(andFilters.size() != 0 && orFilters.size() == 0){
 			return parseFilters(andFilters, criteriaBuilder, root, predicate, Type.And);
 		}else if(andFilters.size() == 0 && orFilters.size() != 0){
 			return parseFilters(orFilters, criteriaBuilder, root, predicate, Type.Or);
+		}else if (andFilters.size() != 0 && orFilters.size() != 0){
+			return parseFilters(andFilters, criteriaBuilder, root, parseFilters(orFilters, criteriaBuilder, root, predicate, Type.Or), Type.And);
 		}else {
 			System.out.println("none predicate");
 		}
@@ -116,7 +97,6 @@ public class Query<T> implements Specification<T> {
 						predicate = chooseOrAnd(predicate, criteriaBuilder.like(analyzeParamsName(queryParamsFilter.getName(), root), (String) queryParamsFilter.getValue()), criteriaBuilder, type);
 						break;
 					case IN:
-						//predicate = criteriaBuilder.in(root.get(queryParamsFilter.getName()));
 						predicate = chooseOrAnd(predicate, root.get(queryParamsFilter.getName()).in(queryParamsFilter.getValue()), criteriaBuilder, type);
 						break;
 					case ISNULL:
@@ -126,7 +106,7 @@ public class Query<T> implements Specification<T> {
 						predicate = chooseOrAnd(predicate, criteriaBuilder.isNotNull(analyzeParamsName(queryParamsFilter.getName(), root)), criteriaBuilder, type);
 						break;
 					case BETWEEN:
-						predicate = chooseOrAnd(predicate, criteriaBuilder.between(analyzeParamsName(queryParamsFilter.getName(), root), (Double)(((List)queryParamsFilter.getValue()).get(0)), (Double)(((List)queryParamsFilter.getValue()).get(1))), criteriaBuilder, type);
+						predicate = chooseOrAnd(predicate, criteriaBuilder.between(analyzeParamsName(queryParamsFilter.getName(), root), (Comparable)(((List)queryParamsFilter.getValue()).get(0)), (Comparable)(((List)queryParamsFilter.getValue()).get(1))), criteriaBuilder, type);
 						break;
 					default:
 				}
@@ -157,13 +137,14 @@ public class Query<T> implements Specification<T> {
 		}
 	}
 
-	public Path analyzeParamsName(String paramsName, Root<T> root){
+	public <X>Path <X>analyzeParamsName(String paramsName, Root<T> root){
 		//解析join表的name属性 长度是1表示根节点的条件, 长度是2 表示join表的条件 表名加上字段名
 		String[] params = paramsName.split("\\.");
 		if(params.length == 1){
 			return root.get(params[0]);
 		}else if(params.length == 2){
-			return joinMap.get(params[0]).get(params[1]);
+
+			return (joinMap.get(params[0])).get(params[1]);
 		}
 		 return null;
 	}

@@ -29,10 +29,10 @@ public class CustomerService {
 
     public List<Customer> getCustomer(){
         Query<Customer> query =new Query<>();
-	    query.and(QueryParamsFilter.eq("id","4028860f656fa72201656fa7f7310004"));
-        query.and(QueryParamsFilter.eq("name","15"));
-//	    query.or(QueryParamsFilter.gt("balance",15),
-//			    QueryParamsFilter.like("phoneNumber","2"));
+        query.and(QueryParamsFilter.eq("name","15"),
+                QueryParamsFilter.eq("code","1"));
+	    query.or(QueryParamsFilter.gt("balance",16),
+			    QueryParamsFilter.eq("note","3"));
         return getCustomerRepository().findAll(query);
     }
 }
