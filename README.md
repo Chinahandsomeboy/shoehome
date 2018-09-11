@@ -12,3 +12,5 @@
 
 jpa 封装 
 实现 join and or alias 子查询 临时表查询 聚合函数 pageable sortby 
+
+graphql代替restful

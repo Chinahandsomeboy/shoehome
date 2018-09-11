@@ -30,12 +30,6 @@ public class SalesOrderService {
    public List getSalesOrder() {
       Query<SalesOrder> query =new Query<>();
 
-      try {
-         DateFormat dateFormat1 = new SimpleDateFormat("yyyy-MM-dd");
-         Date myDate1 = dateFormat1.parse("2018-08-26");
-      } catch (ParseException e) {
-         e.printStackTrace();
-      }
       query.and(QueryParamsFilter.eq("discountPrice", 10.0)
              );
 //      query.or(QueryParamsFilter.eq("finalPrice", 1),
