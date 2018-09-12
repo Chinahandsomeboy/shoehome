@@ -143,8 +143,7 @@ public class Query<T> implements Specification<T> {
 		if(params.length == 1){
 			return root.get(params[0]);
 		}else if(params.length == 2){
-
-			return (joinMap.get(params[0])).get(params[1]);
+			return joinMap.get(params[0]).get(params[1]);
 		}
 		 return null;
 	}
