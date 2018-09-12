@@ -1,9 +1,12 @@
 package com.springboot.shoehome.domain;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.springboot.shoehome.enums.DiscountType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Table;
 import java.io.Serializable;
 
 /**

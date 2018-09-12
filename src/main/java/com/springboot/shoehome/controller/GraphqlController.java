@@ -6,6 +6,7 @@ import graphql.GraphQL;
 import graphql.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -32,7 +33,7 @@ public class GraphqlController {
 
         //创建book查询type
         GraphQLObjectType customerType = newObject()
-                .name("customer")
+                .name("Customer")
                 .field(newFieldDefinition()
                         .name("id")
                         .type(GraphQLString))
@@ -42,11 +43,11 @@ public class GraphqlController {
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("create_date")
+                        .name("createDate")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("modification_date")
+                        .name("modificationDate")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
@@ -66,14 +67,14 @@ public class GraphqlController {
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("phone_number")
+                        .name("phoneNumber")
                         .type(GraphQLString))
 
                 .build();
 
         //创建user查询type
         GraphQLObjectType salesOrderType = newObject()
-                .name("salesOrder")
+                .name("SalesOrder")
 
                 .field(newFieldDefinition()
                         .name("id")
@@ -84,27 +85,27 @@ public class GraphqlController {
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("create_date")
+                        .name("createDate")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("modification_date")
+                        .name("modificationDate")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("discount_price")
+                        .name("discountPrice")
                         .type(GraphQLFloat))
 
                 .field(newFieldDefinition()
-                        .name("expect_date")
+                        .name("expectDate")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("final_price")
+                        .name("finalPrice")
                         .type(GraphQLFloat))
 
                 .field(newFieldDefinition()
-                        .name("is_modified_price")
+                        .name("isModifiedPrice")
                         .type(GraphQLChar))
 
                 .field(newFieldDefinition()
@@ -112,17 +113,16 @@ public class GraphqlController {
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("order_status")
+                        .name("orderStatus")
                         .type(GraphQLString))
 
                 .field(newFieldDefinition()
-                        .name("total_price")
+                        .name("totalPrice")
                         .type(GraphQLFloat))
 
                 .field(newFieldDefinition()
                         .name("customer")
                         .type(new GraphQLList(customerType)))
-
 
                 .build();
 

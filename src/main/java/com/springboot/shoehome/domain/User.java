@@ -1,4 +1,5 @@
 package com.springboot.shoehome.domain;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import javax.persistence.Column;

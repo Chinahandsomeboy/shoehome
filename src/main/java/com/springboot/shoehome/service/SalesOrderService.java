@@ -30,8 +30,8 @@ public class SalesOrderService {
    public List getSalesOrder() {
       Query<SalesOrder> query =new Query<>();
 
-      query.and(QueryParamsFilter.eq("discountPrice", 10.0)
-             );
+      //query.and(QueryParamsFilter.eq("discountPrice", 10.0)
+         //    );
 //      query.or(QueryParamsFilter.eq("finalPrice", 1),
 //              QueryParamsFilter.eq("note", 2)
 //              );

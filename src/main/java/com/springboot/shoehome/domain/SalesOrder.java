@@ -5,8 +5,16 @@ import com.springboot.shoehome.enums.OrderStatusType;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.Type;
-
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import java.io.Serializable;
 import java.util.Date;
 
@@ -28,6 +36,7 @@ public class SalesOrder extends AbsEntity implements Serializable {
     private Customer customer;
 
     @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date expectDate; //期望交付日期
 
     @Column
