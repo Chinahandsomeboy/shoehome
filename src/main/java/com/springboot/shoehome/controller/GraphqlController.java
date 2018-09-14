@@ -132,10 +132,40 @@ public class GraphqlController {
                         .name("salesOrder")
                         .type(salesOrderType)
                         .argument(GraphQLArgument.newArgument().name("id").type(GraphQLString))
+                        .argument(GraphQLArgument.newArgument().name("code").type(GraphQLString))
+                        .argument(GraphQLArgument.newArgument().name("note").type(GraphQLString))
                         .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
                             String id = dataFetchingEnvironment.getArgument("id");
                             for (SalesOrder salesOrder : list) {
                                 if (salesOrder.getId().equals(id)) {
+                                    return salesOrder;
+                                }
+                            }
+                            return null;
+                        })
+                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
+                            String code = dataFetchingEnvironment.getArgument("code");
+                            for (SalesOrder salesOrder : list) {
+                                if (salesOrder.getCode().equals(code)) {
+                                    return salesOrder;
+                                }
+                            }
+                            return null;
+                        })
+                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
+                            String note = dataFetchingEnvironment.getArgument("note");
+                            for (SalesOrder salesOrder : list) {
+                                if (salesOrder.getNote().equals(note)) {
+                                    return salesOrder;
+                                }
+                            }
+                            return null;
+                        })
+                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
+                            String note = dataFetchingEnvironment.getArgument("note");
+                            String code = dataFetchingEnvironment.getArgument("code");
+                            for (SalesOrder salesOrder : list) {
+                                if (salesOrder.getNote().equals(note) && salesOrder.getCode().equals(code)) {
                                     return salesOrder;
                                 }
                             }
