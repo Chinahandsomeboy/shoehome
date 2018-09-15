@@ -161,16 +161,6 @@ public class GraphqlController {
                             }
                             return null;
                         })
-                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
-                            String note = dataFetchingEnvironment.getArgument("note");
-                            String code = dataFetchingEnvironment.getArgument("code");
-                            for (SalesOrder salesOrder : list) {
-                                if (salesOrder.getNote().equals(note) && salesOrder.getCode().equals(code)) {
-                                    return salesOrder;
-                                }
-                            }
-                            return null;
-                        })
                         .build();
 
         //创建schema，用于执行查询
