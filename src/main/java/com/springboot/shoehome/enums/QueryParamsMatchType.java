@@ -7,6 +7,4 @@ package com.springboot.shoehome.enums;
 public enum QueryParamsMatchType {
     EQ, NE, GT, LT, GE, LE, LIKE, IN, ISNULL, ISNOTNULL, BETWEEN
 
-
-
 }

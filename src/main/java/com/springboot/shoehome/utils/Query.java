@@ -18,7 +18,7 @@ public class Query<T> implements Specification<T> {
 	private List<QueryParamsFilter> andFilters = new ArrayList<>();
 	private List<QueryParamsFilter> orFilters = new ArrayList<>();
 	private List<QueryJoinFilter> joinFilters = new ArrayList<>();
-	private Map<String, Join> joinMap = new HashMap<>();
+	//private Map<String, Join> joinMap = new HashMap<>();
 
 	public void and(QueryParamsFilter... queryParamsFilters) {
 		andFilters.addAll(Arrays.asList(queryParamsFilters));
@@ -55,7 +55,7 @@ public class Query<T> implements Specification<T> {
 	public Predicate toPredicate(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
 		//root.getAlias()
 		//root.alias("_SO_");
-		//root.join("customer",JoinType.LEFT).alias("_C_");
+		//Join<root,customer>join  = root.join("customer",JoinType.LEFT).alias("_C_");
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
@@ -133,17 +133,19 @@ public class Query<T> implements Specification<T> {
 
 	public void addJoin(List<QueryJoinFilter> queryJoinFilters, Root<T> root){
 		for (QueryJoinFilter queryJoinFilter : queryJoinFilters) {
-			joinMap.put(queryJoinFilter.getTable(), root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType()));
+			//joinMap.put(queryJoinFilter.getTable(), root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType()));
+			root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType());
 		}
 	}
 
-	public <X>Path <X>analyzeParamsName(String paramsName, Root<T> root){
+	public Path analyzeParamsName(String paramsName, Root<T> root){
 		//解析join表的name属性 长度是1表示根节点的条件, 长度是2 表示join表的条件 表名加上字段名
 		String[] params = paramsName.split("\\.");
 		if(params.length == 1){
 			return root.get(params[0]);
 		}else if(params.length == 2){
-			return joinMap.get(params[0]).get(params[1]);
+			return root.get(params[0]).get(params[1]);
+			//return joinMap.get(params[0]).get(params[1]);
 		}
 		 return null;
 	}

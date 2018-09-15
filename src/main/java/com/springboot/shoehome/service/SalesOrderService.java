@@ -35,7 +35,9 @@ public class SalesOrderService {
 //      query.or(QueryParamsFilter.eq("finalPrice", 1),
 //              QueryParamsFilter.eq("note", 2)
 //              );
-      //query.leftJoin("customer");
+     // query.leftJoin("customer");
+     // query.and(QueryParamsFilter.between("customer.balance", 15.8, 16)
+     // );
 
       return getSalesOrderRepository().findAll(query);
    }
