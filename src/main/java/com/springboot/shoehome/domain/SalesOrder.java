@@ -31,8 +31,9 @@ public class SalesOrder extends AbsEntity implements Serializable {
 
 
     @JoinColumn(name = "customer")
-    @ManyToOne(fetch= FetchType.LAZY)
-    @JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
+    @ManyToOne
+    //@ManyToOne(fetch= FetchType.LAZY)
+    //@JsonIgnoreProperties({"hibernateLazyInitializer","handler"})
     private Customer customer;
 
     @Column

@@ -2,7 +2,10 @@ package com.springboot.shoehome.controller;
 
 import com.springboot.shoehome.domain.SalesOrder;
 import com.springboot.shoehome.service.SalesOrderService;
+import graphql.ExecutionInput;
+import graphql.ExecutionResult;
 import graphql.GraphQL;
+import graphql.GraphQLError;
 import graphql.schema.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,6 +28,26 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GraphqlController {
 
     @Autowired private SalesOrderService salesOrderService;
+
+    //创建特殊类型
+    public static final GraphQLScalarType EMAIL = new GraphQLScalarType("email", "user email",
+            new Coercing() {
+                @Override
+                public Object serialize(Object dataFetchResult) throws CoercingSerializeException {
+                    return dataFetchResult;
+                }
+
+                @Override
+                public Object parseValue(Object input) throws CoercingParseValueException {
+                    return input;
+                }
+
+                @Override
+                public Object parseLiteral(Object input) throws CoercingParseLiteralException {
+                    return input;
+                }
+            });
+
 
     @GetMapping("/testGetGraphQL")
     public Object testGetGraphQL(String query){
@@ -78,7 +101,7 @@ public class GraphqlController {
 
                 .field(newFieldDefinition()
                         .name("id")
-                        .type(GraphQLString))
+                        .type(GraphQLID))
 
                 .field(newFieldDefinition()
                         .name("code")
@@ -106,7 +129,7 @@ public class GraphqlController {
 
                 .field(newFieldDefinition()
                         .name("isModifiedPrice")
-                        .type(GraphQLChar))
+                        .type(GraphQLBoolean))
 
                 .field(newFieldDefinition()
                         .name("note")
@@ -124,6 +147,10 @@ public class GraphqlController {
                         .name("customer")
                         .type(new GraphQLList(customerType)))
 
+//                .field(newFieldDefinition()
+//                        .name("customer")
+//                        .type(GraphQLList.list(customerType)))
+
                 .build();
 
         //获取请求参数中id
@@ -136,30 +163,21 @@ public class GraphqlController {
                         .argument(GraphQLArgument.newArgument().name("note").type(GraphQLString))
                         .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
                             String id = dataFetchingEnvironment.getArgument("id");
+                            String code = dataFetchingEnvironment.getArgument("code");
+                            String note = dataFetchingEnvironment.getArgument("note");
+                            System.out.println(id + code + note);
                             for (SalesOrder salesOrder : list) {
                                 if (salesOrder.getId().equals(id)) {
                                     return salesOrder;
                                 }
-                            }
-                            return null;
-                        })
-                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
-                            String code = dataFetchingEnvironment.getArgument("code");
-                            for (SalesOrder salesOrder : list) {
+                                if (salesOrder.getNote().equals(note)) {
+                                    return salesOrder;
+                                }
                                 if (salesOrder.getCode().equals(code)) {
                                     return salesOrder;
                                 }
                             }
-                            return null;
-                        })
-                        .dataFetcher((DataFetcher) dataFetchingEnvironment -> {
-                            String note = dataFetchingEnvironment.getArgument("note");
-                            for (SalesOrder salesOrder : list) {
-                                if (salesOrder.getNote().equals(note)) {
-                                    return salesOrder;
-                                }
-                            }
-                            return null;
+                            return list;
                         })
                         .build();
 
@@ -174,10 +192,22 @@ public class GraphqlController {
         //传入schema，执行查询
         GraphQL graphQL = GraphQL.newGraphQL(schema).build();
 
-        //返回查询结果集
-        Object data = graphQL.execute(query).getData();
+        ExecutionInput executionInput = ExecutionInput.newExecutionInput().query(query).build();
 
-        return data;
+        ExecutionResult executionResult = graphQL.execute(executionInput);
+
+        Object data = executionResult.getData();
+
+        List<GraphQLError> errors = executionResult.getErrors();
+
+
+        //返回查询结果集
+        if (errors.size()>0){
+            return errors;
+        }else {
+            return data;
+        }
+        //return graphQL.execute(query).getData();
     }
 
 
