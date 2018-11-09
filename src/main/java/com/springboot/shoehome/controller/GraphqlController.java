@@ -1,5 +1,6 @@
 package com.springboot.shoehome.controller;
 
+import com.springboot.shoehome.domain.Customer;
 import com.springboot.shoehome.domain.SalesOrder;
 import com.springboot.shoehome.service.SalesOrderService;
 import graphql.ExecutionInput;
@@ -18,6 +19,7 @@ import java.util.List;
 
 import static graphql.Scalars.*;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInterfaceType.newInterface;
 import static graphql.schema.GraphQLObjectType.newObject;
 
 /**
@@ -28,6 +30,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GraphqlController {
 
     @Autowired private SalesOrderService salesOrderService;
+
 
     //创建特殊类型
     public static final GraphQLScalarType EMAIL = new GraphQLScalarType("email", "user email",
@@ -52,7 +55,7 @@ public class GraphqlController {
     @GetMapping("/testGetGraphQL")
     public Object testGetGraphQL(String query){
         //查询全部（主子表 这里是一张user表，一张book表）
-        List<SalesOrder> list = salesOrderService.getSalesOrder();
+        List<SalesOrder> salesOrders = salesOrderService.getSalesOrder();
 
         //创建book查询type
         GraphQLObjectType customerType = newObject()
@@ -95,13 +98,12 @@ public class GraphqlController {
 
                 .build();
 
-        //创建user查询type
-        GraphQLObjectType salesOrderType = newObject()
-                .name("SalesOrder")
+        GraphQLInterfaceType base = newInterface()
+                .name("base")
 
                 .field(newFieldDefinition()
                         .name("id")
-                        .type(GraphQLID))
+                        .type(GraphQLString))
 
                 .field(newFieldDefinition()
                         .name("code")
@@ -114,6 +116,32 @@ public class GraphqlController {
                 .field(newFieldDefinition()
                         .name("modificationDate")
                         .type(GraphQLString))
+                .build();
+
+
+
+        //创建user查询type
+        GraphQLObjectType salesOrderType = newObject()
+                .name("SalesOrder")
+
+//                .field(newFieldDefinition()
+//                        .name("id")
+//                        .type(GraphQLID))
+//
+//                .field(newFieldDefinition()
+//                        .name("code")
+//                        .type(GraphQLString))
+//
+//                .field(newFieldDefinition()
+//                        .name("createDate")
+//                        .type(GraphQLString))
+//
+//                .field(newFieldDefinition()
+//                        .name("modificationDate")
+//                        .type(GraphQLString))
+
+
+                .withInterface(base)
 
                 .field(newFieldDefinition()
                         .name("discountPrice")
@@ -166,7 +194,7 @@ public class GraphqlController {
                             String code = dataFetchingEnvironment.getArgument("code");
                             String note = dataFetchingEnvironment.getArgument("note");
                             System.out.println(id + code + note);
-                            for (SalesOrder salesOrder : list) {
+                            for (SalesOrder salesOrder : salesOrders) {
                                 if (salesOrder.getId().equals(id)) {
                                     return salesOrder;
                                 }
@@ -177,9 +205,11 @@ public class GraphqlController {
                                     return salesOrder;
                                 }
                             }
-                            return list;
+                            return salesOrders;
                         })
                         .build();
+
+
 
         //创建schema，用于执行查询
         GraphQLSchema schema = GraphQLSchema.newSchema()
