@@ -18,7 +18,6 @@ import java.util.Date;
 @Data
 @MappedSuperclass
 public abstract class AbsEntity implements Serializable {
-    private static final long serialVersionUID = 7324815292231059158L;
 
     @Id
     @GenericGenerator(name = "jpa-uuid", strategy = "uuid")

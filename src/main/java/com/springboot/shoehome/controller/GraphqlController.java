@@ -2,6 +2,7 @@ package com.springboot.shoehome.controller;
 
 import com.springboot.shoehome.domain.Customer;
 import com.springboot.shoehome.domain.SalesOrder;
+import com.springboot.shoehome.repository.SalesOrderRepository;
 import com.springboot.shoehome.service.SalesOrderService;
 import graphql.ExecutionInput;
 import graphql.ExecutionResult;
@@ -14,11 +15,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import static graphql.Scalars.*;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
+import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
+import static graphql.schema.GraphQLInputObjectType.newInputObject;
 import static graphql.schema.GraphQLInterfaceType.newInterface;
 import static graphql.schema.GraphQLObjectType.newObject;
 
@@ -30,7 +35,7 @@ import static graphql.schema.GraphQLObjectType.newObject;
 public class GraphqlController {
 
     @Autowired private SalesOrderService salesOrderService;
-
+    @Autowired private SalesOrderRepository salesOrderRepository;
 
     //创建特殊类型
     public static final GraphQLScalarType EMAIL = new GraphQLScalarType("email", "user email",
@@ -60,73 +65,36 @@ public class GraphqlController {
         //创建book查询type
         GraphQLObjectType customerType = newObject()
                 .name("Customer")
-                .field(newFieldDefinition()
-                        .name("id")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("code")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("createDate")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("modificationDate")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("balance")
-                        .type(GraphQLFloat))
-
-                .field(newFieldDefinition()
-                        .name("discount")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("name")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("note")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("phoneNumber")
-                        .type(GraphQLString))
-
+                .field(newFieldDefinition().name("id").type(GraphQLString))
+                .field(newFieldDefinition().name("code").type(GraphQLString))
+                .field(newFieldDefinition().name("createDate").type(GraphQLString))
+                .field(newFieldDefinition().name("modificationDate").type(GraphQLString))
+                .field(newFieldDefinition().name("balance") .type(GraphQLFloat))
+                .field(newFieldDefinition().name("discount").type(GraphQLString))
+                .field(newFieldDefinition().name("name").type(GraphQLString))
+                .field(newFieldDefinition().name("note").type(GraphQLString))
+                .field(newFieldDefinition().name("phoneNumber") .type(GraphQLString))
                 .build();
 
-        GraphQLInterfaceType base = newInterface()
-                .name("base")
-
-                .field(newFieldDefinition()
-                        .name("id")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("code")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("createDate")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("modificationDate")
-                        .type(GraphQLString))
+        GraphQLInputType customerInputType = newInputObject()
+                .name("CustomerInput")
+                .field(newInputObjectField().name("id").type(GraphQLString))
+                .field(newInputObjectField().name("code").type(GraphQLString))
+                .field(newInputObjectField().name("createDate").type(GraphQLString))
+                .field(newInputObjectField().name("modificationDate").type(GraphQLString))
+                .field(newInputObjectField().name("balance") .type(GraphQLFloat))
+                .field(newInputObjectField().name("discount").type(GraphQLString))
+                .field(newInputObjectField().name("name").type(GraphQLString))
+                .field(newInputObjectField().name("note").type(GraphQLString))
+                .field(newInputObjectField().name("phoneNumber") .type(GraphQLString))
                 .build();
 
-
-
-        //创建user查询type
-        GraphQLObjectType salesOrderType = newObject()
-                .name("SalesOrder")
-
+//        GraphQLInterfaceType base = newInterface()
+//                .name("AbsEntity")
+//
 //                .field(newFieldDefinition()
 //                        .name("id")
-//                        .type(GraphQLID))
+//                        .type(GraphQLString))
 //
 //                .field(newFieldDefinition()
 //                        .name("code")
@@ -139,53 +107,51 @@ public class GraphqlController {
 //                .field(newFieldDefinition()
 //                        .name("modificationDate")
 //                        .type(GraphQLString))
+//                .build();
 
 
-                .withInterface(base)
 
-                .field(newFieldDefinition()
-                        .name("discountPrice")
-                        .type(GraphQLFloat))
+        //创建user查询type
+        GraphQLInputType salesOrderType = newInputObject()
+                .name("SalesOrder")
+                .field(newInputObjectField().name("id") .type(GraphQLID))
+                .field(newInputObjectField().name("code").type(GraphQLString))
+                .field(newInputObjectField().name("createDate").type(GraphQLString))
+                .field(newInputObjectField().name("modificationDate") .type(GraphQLString))
+                //.withInterface(base)
+                .field(newInputObjectField().name("discountPrice").type(GraphQLFloat))
+                .field(newInputObjectField().name("expectDate").type(GraphQLString))
+                .field(newInputObjectField().name("finalPrice").type(GraphQLFloat))
+                .field(newInputObjectField().name("isModifiedPrice").type(GraphQLBoolean))
+                .field(newInputObjectField().name("note").type(GraphQLString))
+                .field(newInputObjectField().name("orderStatus").type(GraphQLString))
+                .field(newInputObjectField().name("totalPrice").type(GraphQLFloat))
+                .field(newInputObjectField().name("customer").type(customerInputType))
+                .build();
 
-                .field(newFieldDefinition()
-                        .name("expectDate")
-                        .type(GraphQLString))
 
-                .field(newFieldDefinition()
-                        .name("finalPrice")
-                        .type(GraphQLFloat))
-
-                .field(newFieldDefinition()
-                        .name("isModifiedPrice")
-                        .type(GraphQLBoolean))
-
-                .field(newFieldDefinition()
-                        .name("note")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("orderStatus")
-                        .type(GraphQLString))
-
-                .field(newFieldDefinition()
-                        .name("totalPrice")
-                        .type(GraphQLFloat))
-
-                .field(newFieldDefinition()
-                        .name("customer")
-                        .type(new GraphQLList(customerType)))
-
-//                .field(newFieldDefinition()
-//                        .name("customer")
-//                        .type(GraphQLList.list(customerType)))
-
+        GraphQLObjectType salesOrderInputType = newObject()
+                .name("SalesOrder")
+                .field(newFieldDefinition().name("id") .type(GraphQLID))
+                .field(newFieldDefinition().name("code").type(GraphQLString))
+                .field(newFieldDefinition().name("createDate").type(GraphQLString))
+                .field(newFieldDefinition().name("modificationDate") .type(GraphQLString))
+                //.withInterface(base)
+                .field(newFieldDefinition().name("discountPrice").type(GraphQLFloat))
+                .field(newFieldDefinition().name("expectDate").type(GraphQLString))
+                .field(newFieldDefinition().name("finalPrice").type(GraphQLFloat))
+                .field(newFieldDefinition().name("isModifiedPrice").type(GraphQLBoolean))
+                .field(newFieldDefinition().name("note").type(GraphQLString))
+                .field(newFieldDefinition().name("orderStatus").type(GraphQLString))
+                .field(newFieldDefinition().name("totalPrice").type(GraphQLFloat))
+                .field(newFieldDefinition().name("customer").type(customerType))
                 .build();
 
         //获取请求参数中id
         GraphQLFieldDefinition personDefinition =
                 newFieldDefinition()
                         .name("salesOrder")
-                        .type(salesOrderType)
+                        .type(new GraphQLList(salesOrderType))
                         .argument(GraphQLArgument.newArgument().name("id").type(GraphQLString))
                         .argument(GraphQLArgument.newArgument().name("code").type(GraphQLString))
                         .argument(GraphQLArgument.newArgument().name("note").type(GraphQLString))
@@ -194,20 +160,56 @@ public class GraphqlController {
                             String code = dataFetchingEnvironment.getArgument("code");
                             String note = dataFetchingEnvironment.getArgument("note");
                             System.out.println(id + code + note);
+                            List<SalesOrder> salesorders = new ArrayList<>();
                             for (SalesOrder salesOrder : salesOrders) {
                                 if (salesOrder.getId().equals(id)) {
-                                    return salesOrder;
+                                    salesorders.add(salesOrder);
                                 }
                                 if (salesOrder.getNote().equals(note)) {
-                                    return salesOrder;
+                                    salesorders.add(salesOrder);
                                 }
                                 if (salesOrder.getCode().equals(code)) {
-                                    return salesOrder;
+                                    salesorders.add(salesOrder);
                                 }
                             }
-                            return salesOrders;
+                            if (salesorders.size()==0){
+                                return salesOrders;
+                            }else{
+                                return salesorders;
+                            }
                         })
                         .build();
+
+        //获取请求参数中id
+        GraphQLFieldDefinition personInputDefinition =
+                newFieldDefinition()
+                        .name("salesOrderInput")
+                        .type(new GraphQLList(salesOrderType))
+                        .argument(GraphQLArgument.newArgument().name("salesOrderInfo").type(new GraphQLNonNull(salesOrderInputType)))
+                        .dataFetcher(environment -> {
+                            Map<String, Object> salesOrderInfoMap = environment.getArgument("salesOrderInfo");
+                            SalesOrder salesOrderInfo = new SalesOrder();
+                            for (String key : salesOrderInfoMap.keySet()){
+                                switch (key){
+                                    case "modificationDate":
+                                        salesOrderInfo.setModificationDate(new Date());
+                                        break;
+                                    case "expectDate":
+                                        salesOrderInfo.setExpectDate(new Date());
+                                        break;
+                                    case "note":
+                                        salesOrderInfo.setNote(salesOrderInfoMap.get("note").toString());
+                                        break;
+                                    case "totalPrice":
+                                        salesOrderInfo.setTotalPrice((Double) salesOrderInfoMap.get("totalPrice"));
+                                        break;
+                                }
+                            }
+                            //salesOrderRepository.update(salesOrderInfo);
+                            return salesOrderInfo;
+                        })
+                        .build();
+
 
 
 
@@ -216,6 +218,10 @@ public class GraphqlController {
                 .query(newObject()
                         .name("salesOrderQuery")
                         .field(personDefinition)
+                        .build())
+                .mutation(newObject()
+                        .name("salesOrderMutation")
+                        .field(personInputDefinition)
                         .build())
                 .build();
 
