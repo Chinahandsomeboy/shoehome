@@ -22,19 +22,6 @@ spring:
         min-idle: 0
     timeout: 0
 
-graphql:
-  spring-graphql-common:
-    clientMutationIdName: clientMutationId
-    injectClientMutationId: true
-    allowEmptyClientMutationId: false
-    mutationInputArgumentName: input
-    outputObjectNamePrefix: Payload
-    inputObjectNamePrefix: Input
-    schemaMutationObjectName: Mutation
-  servlet:
-    mapping: /testGetGraphQL
-    enabled: true
-    corsEnabled: true
 #
 #graphiql:
 #  mapping: /testGetGraphQL1

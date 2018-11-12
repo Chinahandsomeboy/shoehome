@@ -24,52 +24,13 @@ public class graphql {
 
 
     public static void main(String[] args) {
+        
+        Map<String, GraphQLObjectType> map = new HashMap<>();
 
+        GraphQLObjectType cus = buildGraphQLObject(Customer.class, map);
 
-
-        SalesOrder salesOrder = new SalesOrder();
-        Class salesOrderClass = salesOrder.getClass();
-        Class classes = salesOrderClass.getSuperclass();
-        Class classess = classes.getSuperclass();
-        Class classesss = classess.getSuperclass();
-        Field[] fields = SalesOrder.class.getDeclaredFields();
-
-
-        //Arrays.asList(fields).stream().forEach(x -> System.out.println(x.getName()));
-
-       // getAllFields(SalesOrder.class, new ArrayList()).stream().forEach(x -> System.out.println(x.getName()));
-
-        List<Field> customerFields = getAllFields(Customer.class, new ArrayList()).stream().
-                filter(field -> (!field.getName().equals("serialVersionUID"))).collect(Collectors.toList());
-
-        List<Field> salesorderFields = getAllFields(SalesOrder.class, new ArrayList()).stream().
-                filter(field -> (!field.getName().equals("serialVersionUID"))).collect(Collectors.toList());
-
-
-        Arrays.asList(fields).stream().forEach(f -> System.out.println(f.getName()+" "+f.getType().getName()));
-
-        Map<String, GraphQLObjectType> maps = new HashMap<>();
-
-        GraphQLObjectType.Builder  builder = newObject().name("Customer");
-
-        customerFields.stream().forEach(field -> builder.field(newFieldDefinition().name(field.getName()).type(matchType(field.getType().getName(), maps))));
-
-        GraphQLObjectType customerType = builder.build();
-
-        maps.put("Customer", customerType);
-
-
-
-        GraphQLObjectType.Builder  builder1 = newObject().name("SalesOrder");
-
-        salesorderFields.stream().forEach(field -> builder1.field(newFieldDefinition().name(field.getName()).type(matchType(field.getType().getName(), maps))));
-
-        GraphQLObjectType salesorderType = builder1.build();
-
-        maps.put("SalesOrder", salesorderType);
-
-
-
+        GraphQLObjectType sas = buildGraphQLObject(SalesOrder.class, map);
+        
         System.out.println("1");
     }
 
@@ -105,5 +66,24 @@ public class graphql {
                     return map.get(type);
                 }
         }
+    }
+
+
+    public static GraphQLObjectType buildGraphQLObject(Class object, Map maps) {
+
+        String[] objectName = object.getName().split("\\.");
+
+        List<Field> fields = getAllFields(object, new ArrayList()).stream().
+                filter(field -> !"serialVersionUID".equals(field.getName())).collect(Collectors.toList());
+
+        GraphQLObjectType.Builder builder = newObject().name(objectName[objectName.length - 1]);
+
+        fields.stream().forEach(field -> builder.field(newFieldDefinition().name(field.getName()).type(matchType(field.getType().getName(), maps))));
+
+        GraphQLObjectType graphQLObject = builder.build();
+
+        maps.put(objectName[objectName.length - 1], graphQLObject);
+
+        return graphQLObject;
     }
 }

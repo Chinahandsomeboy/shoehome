@@ -17,9 +17,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.springboot.shoehome.controller.graphql.buildGraphQLObject;
 import static graphql.Scalars.*;
 import static graphql.schema.GraphQLFieldDefinition.newFieldDefinition;
 import static graphql.schema.GraphQLInputObjectField.newInputObjectField;
@@ -147,11 +149,21 @@ public class GraphqlController {
                 .field(newFieldDefinition().name("customer").type(customerType))
                 .build();
 
+
+        Map<String, GraphQLObjectType> map = new HashMap<>();
+
+        GraphQLObjectType cus = buildGraphQLObject(Customer.class, map);
+
+        GraphQLObjectType sas = buildGraphQLObject(SalesOrder.class, map);
+
+
+
+
         //获取请求参数中id
         GraphQLFieldDefinition personDefinition =
                 newFieldDefinition()
                         .name("salesOrder")
-                        .type(new GraphQLList(salesOrderType))
+                        .type(new GraphQLList(sas))
                         .argument(GraphQLArgument.newArgument().name("id").type(GraphQLString))
                         .argument(GraphQLArgument.newArgument().name("code").type(GraphQLString))
                         .argument(GraphQLArgument.newArgument().name("note").type(GraphQLString))
@@ -179,6 +191,9 @@ public class GraphqlController {
                             }
                         })
                         .build();
+
+
+
 
         //获取请求参数中id
         GraphQLFieldDefinition personInputDefinition =
@@ -219,10 +234,10 @@ public class GraphqlController {
                         .name("salesOrderQuery")
                         .field(personDefinition)
                         .build())
-                .mutation(newObject()
-                        .name("salesOrderMutation")
-                        .field(personInputDefinition)
-                        .build())
+//                .mutation(newObject()
+//                        .name("salesOrderMutation")
+//                        .field(personInputDefinition)
+//                        .build())
                 .build();
 
         //传入schema，执行查询
