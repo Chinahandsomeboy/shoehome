@@ -26,3 +26,6 @@ spring:
 #graphiql:
 #  mapping: /testGetGraphQL1
 #  enabled: true
+
+buildNumber: ${buildNumber}
+buildTime: ${timestamp}
