@@ -38,6 +38,8 @@ public class SalesOrderService {
      // query.leftJoin("customer");
      // query.and(QueryParamsFilter.between("customer.balance", 15.8, 16)
      // );
+      query.leftJoin("customer");
+      //query.and(QueryParamsFilter.between("customer.balance", 17, 19));
 
       return getSalesOrderRepository().findAll(query);
    }

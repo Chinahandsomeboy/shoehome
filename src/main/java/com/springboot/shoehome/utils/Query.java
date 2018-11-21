@@ -59,6 +59,9 @@ public class Query<T> implements Specification<T> {
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
+		Order order = criteriaBuilder.asc(root.get("customer").get("balance"));
+		Order order1 = criteriaBuilder.asc(root.get("finalPrice"));
+		criteriaQuery.orderBy(order1, order);//排序先后决定权值
 		if(andFilters.size() != 0 && orFilters.size() == 0){
 			return parseFilters(andFilters, criteriaBuilder, root, predicate, Type.And);
 		}else if(andFilters.size() == 0 && orFilters.size() != 0){
