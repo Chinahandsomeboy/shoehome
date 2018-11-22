@@ -6,6 +6,7 @@ import com.springboot.shoehome.service.CustomerService;
 import com.springboot.shoehome.service.SalesOrderService;
 import com.springboot.shoehome.utils.Query;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -48,4 +49,8 @@ public class SalesOrderController {
         return salesOrderService.getSalesOrder();
     }
 
+    @GetMapping("/get1")
+    public Page<SalesOrder> find1(){
+        return salesOrderService.getSalesOrder1();
+    }
 }

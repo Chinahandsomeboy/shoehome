@@ -18,6 +18,7 @@ public class Query<T> implements Specification<T> {
 	private List<QueryParamsFilter> andFilters = new ArrayList<>();
 	private List<QueryParamsFilter> orFilters = new ArrayList<>();
 	private List<QueryJoinFilter> joinFilters = new ArrayList<>();
+	private List<QueryOrderFilter> orderFilters = new ArrayList<>();
 	//private Map<String, Join> joinMap = new HashMap<>();
 
 	public void and(QueryParamsFilter... queryParamsFilters) {
@@ -43,8 +44,8 @@ public class Query<T> implements Specification<T> {
 		return this;
 	}
 
-	public void order() {
-
+	public void order(QueryOrderFilter... orders) {
+		orderFilters.addAll(Arrays.asList(orders));
 	}
 
 	public void page() {
@@ -59,9 +60,10 @@ public class Query<T> implements Specification<T> {
 		//predicate = criteriaBuilder.equal(root.get("_C_").get("name"),"11");
 		Predicate predicate = null;
 		addJoin(joinFilters, root);
-		Order order = criteriaBuilder.asc(root.get("customer").get("balance"));
-		Order order1 = criteriaBuilder.asc(root.get("finalPrice"));
-		criteriaQuery.orderBy(order1, order);//排序先后决定权值
+		//Order order = criteriaBuilder.asc(root.get("customer").get("balance"));
+		//Order order1 = criteriaBuilder.asc(root.get("finalPrice"));
+		//criteriaQuery.orderBy(order);//排序先后决定权值
+		buildSort(root, criteriaQuery, criteriaBuilder);
 		if(andFilters.size() != 0 && orFilters.size() == 0){
 			return parseFilters(andFilters, criteriaBuilder, root, predicate, Type.And);
 		}else if(andFilters.size() == 0 && orFilters.size() != 0){
@@ -74,7 +76,7 @@ public class Query<T> implements Specification<T> {
 		return null;
 	}
 
-	public  Predicate parseFilters(List<QueryParamsFilter> queryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Predicate predicate, Enum type) {
+	private  Predicate parseFilters(List<QueryParamsFilter> queryParams, CriteriaBuilder criteriaBuilder, Root<T> root, Predicate predicate, Enum type) {
 		if (queryParams != null){
 			for (QueryParamsFilter queryParamsFilter : queryParams) {
 				switch (queryParamsFilter.getType()) {
@@ -118,7 +120,7 @@ public class Query<T> implements Specification<T> {
 		return predicate;
 	}
 
-	public Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum type){
+	private Predicate chooseOrAnd(Predicate basicPredicate, Predicate newPredicate, CriteriaBuilder criteriaBuilder, Enum type){
 		if(basicPredicate == null){
 			return newPredicate;
 		}else{
@@ -134,14 +136,14 @@ public class Query<T> implements Specification<T> {
 		}
 	}
 
-	public void addJoin(List<QueryJoinFilter> queryJoinFilters, Root<T> root){
+	private void addJoin(List<QueryJoinFilter> queryJoinFilters, Root<T> root){
 		for (QueryJoinFilter queryJoinFilter : queryJoinFilters) {
 			//joinMap.put(queryJoinFilter.getTable(), root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType()));
 			root.join(queryJoinFilter.getTable(), queryJoinFilter.getJoinType());
 		}
 	}
 
-	public Path analyzeParamsName(String paramsName, Root<T> root){
+	private Path analyzeParamsName(String paramsName, Root<T> root){
 		//解析join表的name属性 长度是1表示根节点的条件, 长度是2 表示join表的条件 表名加上字段名
 		String[] params = paramsName.split("\\.");
 		if(params.length == 1){
@@ -151,6 +153,18 @@ public class Query<T> implements Specification<T> {
 			//return joinMap.get(params[0]).get(params[1]);
 		}
 		 return null;
+	}
+
+	private void buildSort(Root<T> root, CriteriaQuery<?> criteriaQuery, CriteriaBuilder criteriaBuilder) {
+		if (orderFilters.size() > 0) {
+			orderFilters.stream().forEach( order -> {
+				if (order.getDirection().equals(QueryOrderFilter.Direction.Asc)) {
+					criteriaQuery.orderBy(criteriaBuilder.asc(analyzeParamsName(order.getName() ,root)));
+				} else {
+					criteriaQuery.orderBy(criteriaBuilder.desc(analyzeParamsName(order.getName() ,root)));
+				}
+			});
+		}
 	}
 
 }
